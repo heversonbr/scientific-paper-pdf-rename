@@ -1,0 +1,8 @@
+./file_samples
+.venv
+__pycache__
+bkp/
+.DS_Store
+./examples/.DS_Store
+./examples/auto_renamed
+./dist

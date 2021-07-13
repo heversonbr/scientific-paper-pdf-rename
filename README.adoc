@@ -1,0 +1,31 @@
+= Scientific Papers PDF Rename 
+
+
+== Introduction 
+
+Here is a tool to help you to rename all your scientific paper according to their titles. 
+
+The proposed tool scans the PDF in order to find the potential Title of the paper. 
+It looks at two different places. First it tries to find the title at the pdf metadata.
+Then, it scans the first page of the paper and try to identify the sentence with the largest font size. 
+If it find both of them, it asks the user to choose one. 
+
+
+== Dependencies
+
+
+== Installation
+
+
+
+== Usage
+
+----
+$ rename_sci_paper.py <target_directory>
+----
+
+or
+
+----
+$ rename_sci_paper.py <pdf_filename.pdf>
+----
