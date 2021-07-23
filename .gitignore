@@ -1,8 +1,12 @@
 ./file_samples
-.venv
+.git
 __pycache__
 bkp/
 .DS_Store
 ./examples/.DS_Store
 ./examples/auto_renamed
 ./dist
+.venv3.7
+.DS_Store
+.python-version
+./examples

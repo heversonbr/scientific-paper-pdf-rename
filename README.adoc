@@ -1,24 +1,43 @@
 = Scientific Papers PDF Rename 
 
+A tool to rename your scientific papers. 
 
 == Introduction 
 
-Here is a tool to help you to rename all your scientific paper according to their titles. 
+Scientific Papers PDF Rename (SPR for short) is a tool that helps you to rename all your scientific paper according to their titles. 
 
-The proposed tool scans the PDF in order to find the potential Title of the paper. 
-It looks at two different places. First it tries to find the title at the pdf metadata.
-Then, it scans the first page of the paper and try to identify the sentence with the largest font size. 
-If it find both of them, it asks the user to choose one. 
+The proposed tool scans the PDF of your papers in order to find its title and rename the pdf file of the paper accordingly. 
+
+== Approach
+
+Our tool looks for the title at two different places. 
+First it tries to find the title using the pdf metadata. 
+Sometimes when pdf files are carefuly created the title of the paper can be included into the metadata. 
+Unfortunately, it is not as frequent as expect. 
+To overcome that we use the following assumption.
+The title of a scientific paper is usually formatted with the lagest font of the text. 
+Therefore, our tools also scans the first page of the paper and try to identify a bounded size sentence with the largest font size. 
+If it finds a potential titles in both places, it asks the user to choose one between them. 
+
 
 
 == Dependencies
 
+Requires `Python>=3.7` and `PyMuPDF==1.18.14` 
+
 
 == Installation
 
+Use `pip install -r requirements.txt` to install dependencies. 
+
+----
+$ python3 -m pip install -r requirements.txt 
+----
 
 
 == Usage
+
+You can run the script to rename a simple file or a target directory as follows. 
 
 ----
 $ rename_sci_paper.py <target_directory>
@@ -29,3 +48,5 @@ or
 ----
 $ rename_sci_paper.py <pdf_filename.pdf>
 ----
+
+The output will be in the `auto_renamed` directory created by the tool. 

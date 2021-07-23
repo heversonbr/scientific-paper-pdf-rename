@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('../src/sci_paper_renamer/')
+sys.path.append('../')
 from sci_renamer import *
 import re
 
