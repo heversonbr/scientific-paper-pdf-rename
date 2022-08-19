@@ -7,30 +7,45 @@ import string
 import hashlib
 import shutil
 import re
+import logging
 
+# Define logger
+log_level = logging.INFO
+# logger config
+logging.basicConfig(format='[%(asctime)s] - [%(levelname)s]- %(message)s' , level=log_level)
+logger = logging.getLogger()   
 
 
 def keyboardInterruptHandler(signal, frame):
-    print('You pressed Ctrl+C! Leaving...'.format(signal))
+    logger.info('You pressed Ctrl+C! Leaving...'.format(signal))
     sys.exit(0)
 
 def print_usage():
-    print('--------------------------------------------------------------')
-    print('USAGE: python3 rename_sci_paper.py [directory]')
-    print('       python3 rename_sci_paper.py [pdf_filename.pdf]')
-    print('--------------------------------------------------------------')
-    
+    logger.info('********************************************************')
+    logger.info('USAGE:    python3 rename_sci_paper.py [DIRECTORY]')
+    logger.info('          python3 rename_sci_paper.py [PDF_FILENAME]')
+    logger.info('********************************************************')
+
+def print_header():
+    print('*******************************************************************************')
+    print('*                          RENAME my SCIENTIFIC PAPERS                        *')
+    print('*******************************************************************************')
+    print('*******************************************************************************')
+         
 def validate_arguments(arguments):
     
     if len(arguments) > 2:
-        print('Error: wrong number of arguments!')
+        logger.error('Wrong number of arguments!')
+        print_usage()
+        sys.exit()
 
     if len(arguments) == 2:
-        #print(arguments[1])
+        logger.debug(arguments[1])
         target = os.path.abspath(arguments[1])
         base_dir = ''
         filename = ''
-        #print('target : ' + target)
+        logger.debug('target : ' + target)
+        
         if os.path.exists(target): 
             if os.path.isdir(target): 
                 base_dir = os.path.abspath(target)
@@ -39,14 +54,14 @@ def validate_arguments(arguments):
                     base_dir = os.path.dirname(target)
                     filename = os.path.basename(target)
                 else: 
-                    print("Error: argument is not a pdf file")
+                    logger.error('Argument is not a pdf file')
                     sys.exit()
         else:
-            print("Error: directory or file path does not exist!")
+            logger.error("Directory or file path does not exist!")
             sys.exit()
     
     if len(sys.argv) == 1:  
-        print("Error: missing argument")
+        logger.error("Missing argument!")
         print_usage()
         sys.exit()
         
@@ -58,7 +73,6 @@ def hash_file(target_file):
     hasher = hashlib.new('sha256')
     target_file = os.path.abspath(target_file)
     if os.path.isfile(target_file):
-        
         with open(target_file, 'rb') as f:
             while True:
                 data = f.read(blocksize)
@@ -66,10 +80,9 @@ def hash_file(target_file):
                     break
                 hasher.update(data)
 
-
         return hasher.hexdigest()
     else:
-        print('error: ' + target_file + ' is not a file')
+        logger.error(target_file + ' is not a file')
         sys.exit()
         
 def parse_title(title, max_length=None):
@@ -95,8 +108,8 @@ def scan_title(full_file_name, page_num=None):
     trying to figure out what is the sentence that has the larger font-size
     '''
     
-    print('*******************************************************************************')
-    print('Searching title for file : ' + full_file_name)
+    logger.info('*******************************************************************************')
+    logger.info('Searching title for file : ' + full_file_name)
     if page_num is None:
         page_num = 0
 
@@ -105,8 +118,7 @@ def scan_title(full_file_name, page_num=None):
     
     # Check document's metadata for a potential title
     if len(meta_title) > 5:
-        if verbose:  
-            print('Document metadata title: ' + meta_title)
+        logger.debug('Document metadata title: ' + meta_title)
         meta_title = parse_title(meta_title)
     
     # Read first page and look for the setence with the largest font
@@ -135,15 +147,13 @@ def scan_title(full_file_name, page_num=None):
         t_font_size = item[0]
         t_text = item[1]
         t_text_len = len(t_text)
-        if verbose: 
-            print('t_font_size: ' + str(t_font_size) + ' t_text: ' + t_text + ' t_text_len: ' + str(t_text_len))
+        #logger.debug('t_font_size: ' + str(t_font_size) + ' t_text: ' + t_text + ' t_text_len: ' + str(t_text_len))
         # consider only span text bigger than 2 , in order to avoid posible single characters 
         # with font size bigger than the Title being gotten as if they were the title. 
         # ex: in some papers the first letter of the paragraph is bigger than anything else, 
         # only getting the bigger font without considering the size of the text must generate titles that 
         # are as big as a single character. such as a.pdf, or b.pdf, thus only consider span at lines with more than 2 chars 
         if t_text_len > 2:
-            
             if t_font_size > larger_font:           # compare the size of each item with the size of the larger font size 
                 larger_font = t_font_size           # replace text if larger, append if it is the same 
                 title = t_text.strip() + ' '
@@ -159,67 +169,70 @@ def scan_title(full_file_name, page_num=None):
                 
     doc.close()
     parsed_found_title = parse_title(title)
-    if verbose: 
-        print('Parsed Found title: ' + parsed_found_title)
-        print('--------------------------------------------------------')
+
+    logger.debug('Parsed Found title: ' + parsed_found_title)
+    logger.debug('--------------------------------------------------------')
 
     return(meta_title, parsed_found_title)
 
-def do_rename(current_name, new_filename, confirmation=True): 
-          
-    print('*******************************************************************************')
-    print('Renaming pdf file...')
-    print('----------------------------------------------------------------')
-    print('Current name: ' + current_name)
-    print('----------------------------------------------------------------')
-    print('New name: '  + new_filename)
-    print('----------------------------------------------------------------')
+def do_rename(current_filename, new_filename, confirm_before=True): 
+    '''
+    function do_rename: renames the file name given by the full path in 
+                        'current_filename' to 'new_filename'
+            receives: current_filename and 'new_filename
+            returns: 
+    ''' 
+    logger.info('Renaming pdf file...')
+    logger.info('Current file name: ' + current_filename)
+    logger.info('New file name: ' + new_filename)
+
+    if current_filename == new_filename: 
+        logger.warning('Current_filename and new_filename are the same. Skipping...')
+        return False, confirm_before
     
-    if current_name == new_filename: 
-        print('Files already have the same name. Skipping...')
-        return False, confirmation
-    
-    if confirmation == True:
+    if confirm_before == True:
         valid_response = ['y', 'n', 'a', 'q']
         response = input('Do you agree (y/n/a/q) ? \n')
         while(response not in valid_response):
-            print('Answer not valid! Choose (y [yes], n [no], a [all], q [quit])')
+            logger.info('Answer not valid! Choose (y [yes], n [no], a [all], q [quit])')
             response = input('Do you agree (y/n/a/q) ? \n')
 
     else:
+        # if set 'a' (all) , all files must be renamed without confirmation. it will set 'keep_confirming' to false below
         response = 'a'
         
+    # check the user selection ('y', 'n', 'a' or 'q') 
     if response == 'y':
-        os.rename(current_name, new_filename)
-        result = True
-        ask_confimation = True
-        print("Done. ")
-        print('----------------------------------------------------------------')
+        logger.info("Renaming file...")
+        os.rename(current_filename, new_filename)
+        renamed = True
+        keep_confirming = True
+        logger.info("Done. ")
+        
     elif response == 'a':
-        print("Renaming file...")
-        os.rename(current_name, new_filename)
-        result = True
-        ask_confimation = False
-        print("Done. ")
-        print('----------------------------------------------------------------')
+        logger.debug("Renaming files without confirmation...")
+        os.rename(current_filename, new_filename)
+        renamed = True
+        keep_confirming = False
+        logger.debug("Done. ")
+        
     elif response == 'n':
-        print('Skiping file...')
-        print('Keeping file name: \n' + current_name)
-        result = False
-        ask_confimation = True
-        print('----------------------------------------------------------------')
+        logger.warning('Skiping file...')
+        logger.info('Keeping file name: \n' + current_filename)
+        renamed = False
+        keep_confirming = True
+        
     elif response == 'q':
-        print('Quiting...')
+        logger.info('Quiting...')
         sys.exit()
     else:
-        print('ERROR: Answer not valid !!!')
-        print('Keeping file as it is...')
+        logger.error('Answer not valid !!!')
+        logger.info('Keeping file as it is...')
         print_usage()
-        result = False
-        ask_confimation = True
-        #print('----------------------------------------------------------------')
+        renamed = False
+        keep_confirming = True
         
-    return result, ask_confimation
+    return renamed, keep_confirming
         
 def choose_title(meta_title, found_title):
     '''
@@ -230,13 +243,13 @@ def choose_title(meta_title, found_title):
         return found_title; 
         
     valid_choices = ['1' , '2', 'q']
-    print('** Found two candidates for title **')
-    print('[1] - [meta title] : ' + meta_title)
-    print('[2] - [mined title] : ' + found_title)
+    logger.info('** Found two candidates for title **')
+    logger.info('[1] - [meta title] : ' + meta_title)
+    logger.info('[2] - [mined title] : ' + found_title)
     
     choice = input('Choose [1], [2] or q [quit] : \n')
     while(choice not in valid_choices):
-        print('Answer not valid!')
+        logger.warning('Answer not valid!')
         choice = input('Choose [1], [2] or q [quit] : \n')
     
     if choice == '1':
@@ -246,7 +259,7 @@ def choose_title(meta_title, found_title):
         return found_title
     
     if choice == 'q':
-        print("leaving...")
+        logger.info("leaving...")
         sys.exit()
     
 def move_file(src_file, destination_dir):
@@ -257,8 +270,8 @@ def move_file(src_file, destination_dir):
     try: 
         shutil.move(src_file, destination_dir)
     except OSError as e:
-        print(e)
-        print('Warning! : file ' + src_file + ' was not moved to ' + destination_dir + '/auto_renamed')
+        logger.exception(e)
+        logger.warning('File ' + src_file + ' was not moved to ' + destination_dir + '/auto_renamed')
            
 def search_and_rename(src_dir, current_file, confirmation):
     '''
@@ -266,27 +279,22 @@ def search_and_rename(src_dir, current_file, confirmation):
     '''
     
     counter = 0
-    
     # look for title in the pdf file
     meta_title, found_title = scan_title(src_dir + '/' + current_file)
-    if verbose == True:
-        print('get_title returned:  [meta_title]: ' + meta_title, ' [found_title]: ' + found_title )
+    logger.debug('get_title returned:  [meta_title]: ' + meta_title + ' [found_title]: ' + found_title )
         
-    if len(meta_title) == 0: 
-        # found no meta_title 
-        result, ask_confirmation = do_rename(src_dir + '/' + current_file, src_dir + '/' + found_title, confirmation)
-        move_file(src_dir + '/' + found_title, src_dir + '/auto_renamed')
+    if len(meta_title) > 0:
+        # if meta_title > 0: then metadata title was found. user chooses between meta_title and mined title     
+        choosen_title = choose_title(meta_title, found_title)
+    else:
+        choosen_title = found_title       
+ 
+    renamed, ask_confirmation = do_rename(src_dir + '/' + current_file, src_dir + '/' + choosen_title , confirmation)
+    move_file(src_dir + '/' + choosen_title, src_dir + '/auto_renamed')
         
-        if result == True:
-            counter = counter + 1
-    else: 
-        # found both meta_title and mined title     
-        choosen_title = choose_title(meta_title, found_title)            
-        result, ask_confirmation = do_rename(src_dir + '/' + current_file, src_dir + '/' + choosen_title , confirmation)
-        move_file(src_dir + '/' + choosen_title, src_dir + '/auto_renamed')
-        
-        if result == True:
-            counter = counter + 1
+    if renamed == True:
+        counter = counter + 1 
+
 
     return(counter, ask_confirmation)
                         
@@ -298,7 +306,9 @@ def rename_files_in_dir(base_dir):
     rename_counter = 0
     total_counter = 0
     confirmation = True
-    file_fingerprints = []
+    # file_fingerprints -> list of files (based on their hashes) used to avoid duplicated files. 
+    #                      when a duplicated file is found it adds a 'dup' prefix to the file name
+    file_fingerprints = []  
     full_path_base_dir = os.path.abspath(base_dir)
 
     if os.path.isdir(full_path_base_dir):
@@ -309,10 +319,9 @@ def rename_files_in_dir(base_dir):
             if current_file.endswith('.pdf'):
                 total_counter+=1 
                 fingerprint = hash_file(full_path_base_dir + '/' + current_file)
-                if verbose == True: 
-                    print('[Current file name] : ' + current_file)
-                    print('[Current file hash] : ' + fingerprint) 
-                    
+                logger.debug('[Current file name] : ' + current_file)
+                logger.debug('[Current file hash] : ' + fingerprint) 
+                 
                 if fingerprint not in file_fingerprints:
                     file_fingerprints.append(fingerprint)
                     result, ask_confirmation = search_and_rename(full_path_base_dir, current_file, confirmation)
@@ -320,15 +329,14 @@ def rename_files_in_dir(base_dir):
                     confirmation = ask_confirmation
                                        
                 else: 
-                    print('Another file with the same content (hash) was found in the source directory!')
-                    print('Skipping file: ' + current_file + ' adding prefix `dup_`to it')
+                    logger.warning('Another file with the same content (hash) was found in the source directory!')
+                    logger.info('Skipping file: ' + current_file + ' adding prefix `dup_`to it')
                     os.rename(full_path_base_dir + '/' + current_file, full_path_base_dir + '/dup_' + current_file )
-                    print('----------------------------------------------------------------')
+                    #print('----------------------------------------------------------------')
 
     else:
-        print('Error: directory does not exist!' )
-        print(src_dir)
-   
+        logger.error('Directory does not exist!' )
+
     return rename_counter, total_counter  
        
 def rename_target_file(src_dir, filename):
@@ -339,8 +347,7 @@ def rename_target_file(src_dir, filename):
     '''
 
     fullpath_filename = src_dir + '/' + filename
-    if verbose == True:
-        print('searching file: ' + fullpath_filename)
+    logger.debug('searching file: ' + fullpath_filename)
 
     counter = 0
     if os.path.isfile(fullpath_filename):
@@ -350,46 +357,39 @@ def rename_target_file(src_dir, filename):
             counter = counter + result
                 
         else:
-            print("Error: file is not a pdf!")
+            logger.error("File is not a pdf!")
              
     else:
-            print("Error: file does not exist!")
-            print(fullpath_filename)
+            logger.error("File does not exist!")
             
     return counter
       
 def main():
     
+    print_header()
+    # validade arguments passed in the command line
+    base_dir, filename = validate_arguments(sys.argv)
     
-    print('*******************************************************************************')
-    print('*                          RENAME my SCIENTIFIC PAPERS                        *')
-    print('*******************************************************************************')
-    print('*******************************************************************************')
+    # set handler to capture the 'control+C' interruption from keyboard
+    signal.signal(signal.SIGINT, keyboardInterruptHandler)
+    confirmation=True
+    
     # target path is either a (full path) directory or (full path) file name
     target_path = base_dir + '/' + filename
-    print('[Target Path]: ')   
-    print(target_path) 
-    print('*******************************************************************************')
-    if verbose == True:
-        print('[base_dir]: ' + base_dir)
-        print('[filename]: ' + filename)
-        print('*******************************************************************************')
-    
+    logger.info('[Target Path]: ' + target_path)   
+    logger.debug('[base_dir]: ' + base_dir)
+    logger.debug('[filename]: ' + filename)
+       
     if os.path.isdir(target_path):
         rename_counter, total_counter = rename_files_in_dir(base_dir)
     else:
         rename_counter = rename_target_file(base_dir, filename)
         total_counter = 1
-    print('*******************************************************************************')
-    print('Finished!  ')
-    print('Total files: ' + str(total_counter) + ' , Files renamed: ' + str(rename_counter) )
-    print('*******************************************************************************')
-       
+
+    logger.info('*******************************************************************************')
+    logger.info('Finished!')
+    logger.info('Total files: ' + str(total_counter) + ' Files renamed: ' + str(rename_counter))
+
 if __name__ == "__main__":
-    
-    base_dir, filename = validate_arguments(sys.argv)
-    verbose=False
-    signal.signal(signal.SIGINT, keyboardInterruptHandler)
-    confirmation=True
-    
+
     main()
