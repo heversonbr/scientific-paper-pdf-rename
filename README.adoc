@@ -82,3 +82,7 @@ $ sci_rename.py <pdf_filename.pdf>
 
 The output will be in a directory called `auto_renamed`. 
 Use the `examples` directory to test the renaming tool if you wish.
+
+
+== Feedback
+All feedbacks are welcome. I did this simple tool to try avoiding  the hell of looking for a specific paper I have downloaded before and got lost among many others papers downloaded. I hope it would help someone. 
