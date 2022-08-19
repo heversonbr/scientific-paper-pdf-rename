@@ -1,8 +1,10 @@
 = Scientific Papers PDF Rename 
 
-A simple tool to rename your scientific papers. 
+A simple tool to rename ALL your scientific papers. 
 
 image::./img/renamer.png[]
+
+Now you can organize and rename ALL those scientific papers you have downloaded once, but you didn't have the time to organize and rename one-by-one in your directories. 
 
 == Introduction 
 
