@@ -1,25 +1,23 @@
 = Scientific Papers PDF Rename 
 
-A tool to rename your scientific papers. 
+A simple tool to rename your scientific papers. 
 
 == Introduction 
 
-Scientific Paper PDF Rename (_sci rename_ for short) is a command line tool that 
+Scientific Paper PDF Rename (*_sci_rename_* for short) is a command line tool that 
 helps you to rename all your scientific paper according to their titles. 
 The proposed tool scans the PDF file of your papers in order to find its title and 
 rename the pdf file of the paper accordingly. 
 
 == Approach
 
-_sci rename_ looks for the title at two different places. 
+*_sci_rename_* looks for the title at two different places. 
 First it tries to find the title using the pdf metadata. 
 When pdf files are carefuly created the title of the paper can be 
 included into the pdf metadata. Unfortunately, this practice not as frequent as 
 we expect. To overcome that we use the following assumption. The title of a scientific 
 paper is usually formatted with the largest font of the text. Therefore, 
-_sci rename_ also scans the first page of the paper and try to identify a 
-bounded size sentence with the largest font size. If it finds a potential 
-title in both cases (i.e., metadata and larger font approach), it asks the user 
+*_sci_rename_* also scans the first page of the paper and try to identify a bounded size sentence with the largest font size. If it finds a potential title in both cases (i.e., metadata and larger font approach), it asks the user 
 to choose one between them. 
 
 == Dependencies
