@@ -1,6 +1,6 @@
 = Scientific Papers PDF Rename 
 
-A simple tool to rename ALL your scientific papers. 
+A simple command-line tool to rename ALL your scientific papers. 
 
 image::./img/renamer.png[]
 
@@ -74,14 +74,14 @@ You can run the script to rename a simple file or a target directory as follows.
 
 .all files in directory
 ----
-$ sci_rename.py <target_directory>
+$ python3 sci_rename.py <target_directory>
 ----
 
 or
 
 .single file
 ----
-$ sci_rename.py <pdf_filename.pdf>
+$ python3 sci_rename.py <pdf_filename.pdf>
 ----
 
 The output will be in a directory called `auto_renamed`. 
@@ -89,4 +89,4 @@ Use the `examples` directory to test the renaming tool if you wish.
 
 
 == Feedback
-All feedbacks are welcome. I did this simple tool to try avoiding  the hell of looking for a specific paper I have downloaded before and got lost among many others papers downloaded. I hope it would help someone. 
+All feedbacks are welcome. It was only tested on Mac OSx and Linux. I did this simple tool to try avoiding  the hell of looking for a specific paper I have downloaded before and got lost among many others papers downloaded. I hope it will help. 
