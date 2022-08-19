@@ -2,6 +2,8 @@
 
 A simple tool to rename your scientific papers. 
 
+image::./img/renamer.png[]
+
 == Introduction 
 
 Scientific Paper PDF Rename (*_sci_rename_* for short) is a command line tool that 
