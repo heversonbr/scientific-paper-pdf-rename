@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append('../')
-from sci_renamer import *
+from sci_rename import parse_title
 import re
 
 

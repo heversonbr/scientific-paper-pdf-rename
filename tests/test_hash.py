@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append('../')
-from sci_renamer import *
+from sci_rename import hash_file
 import re
 
 def test_hash():
