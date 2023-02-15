@@ -10,7 +10,6 @@ import re
 import logging
 from src.helper import *
 
-
 # Define logger / logger config
 log_level = logging.INFO
 logging.basicConfig(format='[%(asctime)s] - [%(levelname)s]- %(message)s' , level=log_level)
@@ -214,7 +213,6 @@ def confirm_to_continue():
         logger.info("aborting...")  
         sys.exit()
     
-    
 def select_loop_type():
     '''
     Function to allow user to select the loop mode, in the case of renaming all files in a directory. 
@@ -238,8 +236,6 @@ def select_loop_type():
     if choice == 'q':
         logger.info("aborting...")
         sys.exit()
-    
-
     
 def move_file(fullpath_src_file, destination_dir, dest_file):
     
