@@ -194,10 +194,11 @@ def do_rename(fullpath_current_filename, fullpath_new_filename):
     
 def confirm_to_continue():
     
-    logger.debug('Choose [c] to continue.')
+    logger.debug('Choose [c] to continue')
+    logger.debug('Choose [s] to skip file')
     logger.debug('Choose [a] to abort')
-    valid_choices = ['c', 'a']
-    choice = input('Choose [c] to continue or [a] to abort : \n')
+    valid_choices = ['c', 's', 'a']
+    choice = input('Choose [c] to continue, [s] to skip, or [a] to abort : \n')
     
     while(choice not in valid_choices):
         logger.warning('Answer not valid!')
@@ -205,9 +206,12 @@ def confirm_to_continue():
         
     if choice == 'c':
         return True
+    
+    if choice == 's':
+        return False
             
     if choice == 'a':
-        logger.info("aborting...")
+        logger.info("aborting...")  
         sys.exit()
     
     
@@ -307,8 +311,11 @@ def rename_files_in_dir(base_dir):
                     logger.debug('[Current file hash] : ' + fingerprint) 
                     logger.debug('[loop_type] : ' + loop_type) 
                     if loop_type == '2': 
-                        confirm_to_continue()
-
+                        answer = confirm_to_continue()
+                        
+                    if answer is False:
+                        continue 
+                    
                     if fingerprint not in file_fingerprints:
                         file_fingerprints.append(fingerprint)
                         found_title = search_candidate_title(full_path_base_dir, current_file)
@@ -317,8 +324,6 @@ def rename_files_in_dir(base_dir):
                             if renamed:
                                 move_file(full_path_base_dir + '/' + found_title, full_path_base_dir + '/auto_renamed_pdf', found_title)
                                 renamed_counter+=1
-                                
-
                     else: 
                         logger.warning('Another file with the same content (hash) was found in the source directory!')
                         logger.info('Skipping file: ' + current_file + ' adding prefix `duplicated_`to it')
