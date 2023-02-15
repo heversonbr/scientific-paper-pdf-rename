@@ -310,11 +310,12 @@ def rename_files_in_dir(base_dir):
                     logger.info('[Current file name] : ' + current_file)
                     logger.debug('[Current file hash] : ' + fingerprint) 
                     logger.debug('[loop_type] : ' + loop_type) 
+                  
                     if loop_type == '2': 
                         answer = confirm_to_continue()
                         
-                    if answer is False:
-                        continue 
+                        if answer is False:
+                            continue 
                     
                     if fingerprint not in file_fingerprints:
                         file_fingerprints.append(fingerprint)
