@@ -247,7 +247,7 @@ def move_file(fullpath_src_file, destination_dir, dest_file):
         shutil.move(fullpath_src_file, os.path.join(destination_dir, dest_file))
     except OSError as e:
         logger.exception(e.strerror)
-        logger.warning('File ' + fullpath_src_file + ' was not moved to ' + destination_dir + '/auto_renamed' )
+        logger.warning('File ' + fullpath_src_file + ' was not moved to ' + destination_dir + '/auto_renamed_pdf' )
                 
 def search_candidate_title(src_dir, current_file):
     '''
@@ -315,7 +315,7 @@ def rename_files_in_dir(base_dir):
                         if found_title is not None:
                             renamed = do_rename(full_path_base_dir + '/' + current_file, full_path_base_dir + '/' + found_title)
                             if renamed:
-                                move_file(full_path_base_dir + '/' + found_title, full_path_base_dir + '/auto_renamed', found_title)
+                                move_file(full_path_base_dir + '/' + found_title, full_path_base_dir + '/auto_renamed_pdf', found_title)
                                 renamed_counter+=1
                                 
 
@@ -345,7 +345,7 @@ def rename_target_file(src_dir, filename):
             if found_title is not None:
                 renamed = do_rename(fullpath_filename, src_dir + '/' + found_title)
                 if renamed:
-                    move_file(src_dir + '/' + found_title, src_dir + '/auto_renamed', found_title)
+                    move_file(src_dir + '/' + found_title, src_dir + '/auto_renamed_pdf', found_title)
                     return True      
         else:
             logger.debug("File is not a pdf!")
