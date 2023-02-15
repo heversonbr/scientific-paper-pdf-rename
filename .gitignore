@@ -3,7 +3,7 @@ __pycache__/
 bkp/
 .DS_Store
 ./examples/.DS_Store
-./examples/auto_renamed
+./examples/auto_renamed_pdf
 .venv
 .DS_Store
 .python-version
