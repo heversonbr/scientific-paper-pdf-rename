@@ -373,6 +373,9 @@ def main():
         # target is directory
         logger.debug('[base_dir]: ' + base_dir)
         rename_counter, total_counter = rename_files_in_dir(base_dir)
+        logger.info('*' * 80)
+        logger.info('Finished => Total files: ' + str(total_counter) + ' Renamed files: ' + str(rename_counter))
+
     else:
         # target is a file
         logger.debug('[base_dir]: ' + base_dir)
@@ -382,10 +385,8 @@ def main():
         if renamed: 
             rename_counter+=1 
 
-    logger.info('*' * 80)
-    logger.info('Finished!')
-    #logger.info('Total files: ' + str(total_counter) + ' Files renamed: ' + str(rename_counter))
-    logger.info('Finished. Files renamed: ' + str(rename_counter))
+        logger.info('*' * 80)
+        logger.info('Finished => Renamed files : ' + str(rename_counter))
 
 if __name__ == "__main__":
 
