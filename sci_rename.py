@@ -12,7 +12,7 @@ from src.helper import *
 
 
 # Define logger / logger config
-log_level = logging.DEBUG
+log_level = logging.INFO
 logging.basicConfig(format='[%(asctime)s] - [%(levelname)s]- %(message)s' , level=log_level)
 logger = logging.getLogger() 
 set_helper_logger(log_level)
