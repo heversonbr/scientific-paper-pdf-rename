@@ -115,7 +115,7 @@ def scan_title(full_file_name, page_num=None):
     size_text_tup_list =[]
     title=''
     # get paget text 
-    blocks = page.getText('dict')['blocks']
+    blocks = page.get_text('dict')['blocks']
     for blk in blocks:                              # iterate through text blocks
         if blk['type'] == 0:                        # only considers text blocks (type 0)
             for line in blk['lines']:               # iterate through text lines
