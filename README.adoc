@@ -1,4 +1,5 @@
-= Scientific Papers PDF Rename 
+= Scientific Papers PDF Rename
+:icons: font
 
 A simple command-line tool to rename ALL your scientific papers. 
 
@@ -26,7 +27,11 @@ to choose one between them.
 
 == Dependencies
 
-Requires `Python>=3.7` and `PyMuPDF==1.18.14` 
+Requires *`Python==3.7`* and *`PyMuPDF==1.18.14`* 
+
+|:boom: DANGER |: *Using other versions will probably break your installation* !! 
+
+If your version is higher than you can use https://github.com/pyenv/pyenv[pyenv] to install multiple versions of Python in your machine. 
 
 == Installation
 
