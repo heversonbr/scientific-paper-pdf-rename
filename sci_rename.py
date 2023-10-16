@@ -2,6 +2,8 @@
 import fitz
 import os
 import sys
+import platform
+import pkg_resources
 import signal
 import string
 import hashlib
@@ -91,6 +93,47 @@ def parse_title(title, max_length=None):
     title = string.capwords(title) + '.pdf'
     return title
 
+def get_page_text(current_page):
+    # first find python version
+    #python_version = sys.version
+    # Get the Python version as a string
+    
+    python_version = platform.python_version()
+    tested_versions = ["3.11.6", "3.7.17", "3.8.18"]
+    library_name = "PyMuPDF"
+    library_version = pkg_resources.get_distribution(library_name).version
+
+    if library_version == "1.18.14":        
+        if python_version == "3.7.0":
+            logger.debug('Python  version is: ' + python_version) 
+            logger.debug('PyMuPDF version is: ' + library_version)
+            blocks = current_page.getText('dict')['blocks']
+        else: 
+            logger.warn('Python  version is: ' + python_version) 
+            logger.warn('PyMuPDF version is: ' + library_version)
+            logger.error('Your Python version is not at the required level to work with PyMuPDF 1.18.14')
+            logger.error('Please ensure that both meet the specified version requirements for this script to function properly.')
+            sys.exit();
+    elif library_version == "1.22.5":
+        if python_version in tested_versions:
+            blocks = current_page.get_text('dict')['blocks']
+            logger.debug('Python  version is: ' + python_version) 
+            logger.debug('PyMuPDF version is: ' + library_version)
+        else:
+            logger.warn('Python  version is: ' + python_version) 
+            logger.warn('PyMuPDF version is: ' + library_version)
+            logger.error('Your Python version is not at the required level to work with PyMuPDF 1.22.5')
+            logger.error('Please ensure that both meet the specified version requirements for this script to function properly.')
+            sys.exit();
+    else: 
+        logger.warn('Python  version is: ' + python_version) 
+        logger.warn('PyMuPDF version is: ' + library_version)
+        logger.error('Your Python version or PyMuPDF is not at the required level!')
+        logger.error('Please ensure that both meet the specified version requirements for this script to function properly.')
+        sys.exit()
+    
+    return blocks
+    
 def scan_title(full_file_name, page_num=None):
     '''
     scans the pdf file looking for a title, either based on the pdf metadata or 
@@ -115,7 +158,8 @@ def scan_title(full_file_name, page_num=None):
     size_text_tup_list =[]
     title=''
     # get paget text 
-    blocks = page.getText('dict')['blocks']
+    #blocks = page.get_text('dict')['blocks']
+    blocks=get_page_text(page)
     for blk in blocks:                              # iterate through text blocks
         if blk['type'] == 0:                        # only considers text blocks (type 0)
             for line in blk['lines']:               # iterate through text lines

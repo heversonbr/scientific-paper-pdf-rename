@@ -27,11 +27,23 @@ to choose one between them.
 
 == Dependencies
 
-Requires *`Python==3.7`* and *`PyMuPDF==1.18.14`* 
+We recommend using *Python 3.11.6* and *PyMuPDF 1.22.5*.
 
-|:boom: DANGER |: *Using other versions will probably break your installation* !! 
+However, we have tested the following versions. 
+
+|===
+| *Python* version  | *PyMuPDF* required 
+|3.11.6   |1.22.5     
+|3.8.18   |1.22.5     
+|3.7.17   |1.22.5     
+|3.7.0    |1.18.14    
+|===
+
+|:boom: DANGER |: *Using unverified versions may lead to a malfunctioning installatio* !! 
 
 If your version is higher than you can use https://github.com/pyenv/pyenv[pyenv] to install multiple versions of Python in your machine. 
+
+If your current version doesn't align with these requirements, you can utilize https://github.com/pyenv/pyenv[pyenv] to install multiple Python versions on your machine and execute it within a virtualized environment. Install the dependency as recommended in the following. 
 
 == Installation
 
