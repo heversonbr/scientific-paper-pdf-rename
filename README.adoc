@@ -39,7 +39,7 @@ However, we have tested the following versions.
 |3.7.0    |1.18.14    
 |===
 
-|:boom: DANGER |: *Using unverified versions may lead to a malfunctioning installatio* !! 
+|:boom: DANGER |: *Using unverified versions may lead to a malfunctioning installation* !! 
 
 If your version is higher than you can use https://github.com/pyenv/pyenv[pyenv] to install multiple versions of Python in your machine. 
 
