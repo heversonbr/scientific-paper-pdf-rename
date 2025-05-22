@@ -1,3 +1,33 @@
+[project]
+name = "sci-paper-rename"
+version = "0.9"
+description = "A tool that automatically renames scientific paper PDF files based on their titles. It scans the PDF content to detect the paper’s title and uses it to generate a clean, meaningful filename."
+readme = "README.md"
+requires-python = ">=3.11.6, <3.12.0"
+license = {text = "GNU Affero General Public License v3"}
+authors = [
+  { name = "Heverson B. Ribeiro", email = "heversonbr@gmail.com" }
+]
+dependencies = [
+  "PyMuPDF==1.22.5"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: GNU Affero General Public License v3",
+  "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage = "https://github.com/heversonbr/sci-paper-rename"
+"Bug Tracker" = "https://github.com/heversonbr/sci-paper-rename/issues"
+
+[project.scripts]
+sci-paper-rename = "sci_paper_rename.__main__:main"
+
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = { find = { include = ["sci_paper_rename"] } }

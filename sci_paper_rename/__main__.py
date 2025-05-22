@@ -10,7 +10,7 @@ import hashlib
 import shutil
 import re
 import logging
-from src.helper import *
+from .helper import *
 
 # Define logger / logger config
 log_level = logging.INFO
@@ -400,14 +400,55 @@ def rename_target_file(src_dir, filename):
             logger.error("File does not exist!")
             return False
       
+import argparse
+import os
+import sys
+import signal
+import logging
+
+logger = logging.getLogger(__name__)
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Rename scientific papers based on their titles inside PDF files."
+    )
+    parser.add_argument(
+        "path",
+        help="Path to a PDF file or a directory containing PDF files."
+    )
+
+    args = parser.parse_args()
+
+    path = os.path.abspath(args.path)
+    base_dir = ''
+    filename = ''
+
+    if os.path.exists(path):
+        if os.path.isdir(path):
+            base_dir = path
+        elif os.path.isfile(path) and path.endswith('.pdf'):
+            base_dir = os.path.dirname(path)
+            filename = os.path.basename(path)
+        else:
+            logger.error("Argument must be a PDF file or a directory.")
+            sys.exit(1)
+    else:
+        logger.error(f"Directory or file [{args.path}] path does not exist!")
+        sys.exit(1)
+
+    return base_dir, filename
+
 def main():
-    
+        
     print_header()
     # validade arguments passed in the command line
-    base_dir, filename = validate_arguments(sys.argv)
+    #base_dir, filename = validate_arguments(sys.argv)
+    # use argparse instead of sys.argv
+    base_dir, filename = parse_arguments()
     
     # set handler to capture the 'control+C' interruption from keyboard
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
+    
     
     # target path is either a (full path) directory or (full path) file name
     target_path = base_dir + '/' + filename
@@ -434,6 +475,5 @@ def main():
         logger.info('*' * 80)
         logger.info('Finished => Renamed files : ' + str(rename_counter))
 
-if __name__ == "__main__":
-
-    main()
+#if __name__ == "__main__":
+#    main()
