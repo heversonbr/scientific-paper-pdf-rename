@@ -15,6 +15,6 @@ dist/
 *~.vscode/
 venv*/
 *.pyc
-./generate_distribution.sh
-./reinstall_package_locally.sh
+generate_distribution.sh
+reinstall_package_locally.sh
 upload_distribution_to_TestPyPI.sh
