@@ -31,7 +31,7 @@ If your version doesn't match, use [pyenv](https://github.com/pyenv/pyenv) to in
 
 You can install **sci-paper-rename** easily with pip:
 
-### From PyPI (once published)
+### From [PyPI](https://pypi.org/project/sci-paper-rename/)
 
 ```bash
 pip install sci-paper-rename
