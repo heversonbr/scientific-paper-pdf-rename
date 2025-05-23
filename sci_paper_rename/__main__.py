@@ -165,7 +165,7 @@ def get_page_text(current_page):
             logger.error("Your Python version is not at the required level to work with PyMuPDF 1.18.14. "
                          "Please ensure that both meet the specified version requirements for this script to function properly.")
             sys.exit(1)
-    elif library_version in ["1.22.5", "1.26.0"]:
+    elif library_version in ["1.22.5", "1.26.0", "1.22.0"]:
         if python_version in tested_versions:
             logger.debug(version_message)
             # Use get_text for these versions.

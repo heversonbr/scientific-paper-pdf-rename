@@ -22,20 +22,10 @@ If both methods succeed, the user is prompted to choose which title to use.
 
 ## Dependencies
 
-We recommend using **Python 3.11.6** and **PyMuPDF 1.22.5**.
+The current version depends on **Python 3.11.6** and **PyMuPDF 1.26.0**. 
+Please make sure to have them installed before running the package!
 
-However, the following combinations were tested:
-
-| Python Version | PyMuPDF Required |
-|----------------|------------------|
-| 3.11.6         | 1.22.5           |
-| 3.8.18         | 1.22.5           |
-| 3.7.17         | 1.22.5           |
-| 3.7.0          | 1.18.14          |
-
-> ⚠️ **DANGER:** *Using unverified versions may lead to a malfunctioning installation!*
-
-If your version doesn't match, use [pyenv](https://github.com/pyenv/pyenv) to install multiple Python versions.
+If your version doesn't match, use [pyenv](https://github.com/pyenv/pyenv) to install Python version 3.11.6.
 
 ## Installation
 
@@ -63,21 +53,15 @@ source .venv/bin/activate
 pip install .
 ```
 
-
-
 ## Usage
 
-After installation, use the command line tool directly:
+After installation, use the tool from the command line.
 
-
-```bash
-sci-paper-rename [path-to-pdf-or-directory]
-```
 
 **Rename all files in a directory**
 
 ```bash
-python3 sci-paper-rename.py <target_directory>
+python3 sci-paper-rename.py </path/to/target_directory>
 ```
 
 **Rename a single PDF file**
