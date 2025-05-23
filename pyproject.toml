@@ -1,6 +1,6 @@
 [project]
 name = "sci-paper-rename"
-version = "1.0.2"
+version = "1.0.3"
 description = "A tool that automatically renames scientific paper PDF files based on their titles. It scans the PDF content to detect the paper’s title and uses it to generate a clean, meaningful filename."
 readme = "README.md"
 requires-python = ">=3.11.6, <3.12.0"
