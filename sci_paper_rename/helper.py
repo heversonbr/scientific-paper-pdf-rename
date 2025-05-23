@@ -7,7 +7,7 @@ def set_helper_logger(log_level):
     logging.basicConfig(format='[%(asctime)s] - [%(levelname)s]- %(message)s' , level=log_level)
     global logger
     logger = logging.getLogger() 
-    print(logger)
+    #print(logger)
     
 def print_usage():
     if logger is not None:
