@@ -10,7 +10,7 @@ import hashlib
 import shutil
 import re
 import logging
-from src.helper import *
+from .helper import *
 
 # Define logger / logger config
 log_level = logging.INFO
@@ -93,7 +93,10 @@ def parse_title(title, max_length=None):
     title = string.capwords(title) + '.pdf'
     return title
 
-def get_page_text(current_page):
+def deprecating_get_page_text(current_page):
+    '''
+    this function is deprecating, keeping here as archive only.
+    '''
     # first find python version
     #python_version = sys.version
     # Get the Python version as a string
@@ -134,6 +137,52 @@ def get_page_text(current_page):
     
     return blocks
     
+
+def get_page_text(current_page):
+    
+    '''
+        This fuunction is required for compatibility reasons. 
+        there's a function get_text from PyMuPDF that changed its name from one version to the other. get_text or get_Text
+        so this function just try to track the compatibility of that.
+    '''
+    # Get the current Python version and PyMuPDF version.
+    python_version = platform.python_version()
+    library_name = "PyMuPDF"
+    library_version = pkg_resources.get_distribution(library_name).version
+
+    # Define supported Python versions for PyMuPDF versions 1.22.5 and 1.26.0.
+    tested_versions = ["3.11.6", "3.7.17", "3.8.18"]
+
+    # Prepare a common version message.
+    version_message = f"Python version: {python_version}, PyMuPDF version: {library_version}"
+
+    if library_version == "1.18.14":
+        if python_version == "3.7.0":
+            logger.debug(version_message)
+            blocks = current_page.getText('dict')['blocks']
+        else:
+            logger.warning(version_message)
+            logger.error("Your Python version is not at the required level to work with PyMuPDF 1.18.14. "
+                         "Please ensure that both meet the specified version requirements for this script to function properly.")
+            sys.exit(1)
+    elif library_version in ["1.22.5", "1.26.0", "1.22.0"]:
+        if python_version in tested_versions:
+            logger.debug(version_message)
+            # Use get_text for these versions.
+            blocks = current_page.get_text('dict')['blocks']
+        else:
+            logger.warning(version_message)
+            logger.error(f"Your Python version is not at the required level to work with PyMuPDF {library_version}. "
+                         "Please ensure that both meet the specified version requirements for this script to function properly.")
+            sys.exit(1)
+    else:
+        logger.warning(version_message)
+        logger.error("Your Python version or PyMuPDF is not at the required level! "
+                     "Please ensure that both meet the specified version requirements for this script to function properly.")
+        sys.exit(1)
+    
+    return blocks
+
 def scan_title(full_file_name, page_num=None):
     '''
     scans the pdf file looking for a title, either based on the pdf metadata or 
@@ -400,14 +449,55 @@ def rename_target_file(src_dir, filename):
             logger.error("File does not exist!")
             return False
       
+import argparse
+import os
+import sys
+import signal
+import logging
+
+logger = logging.getLogger(__name__)
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Rename scientific papers based on their titles inside of PDF files."
+    )
+    parser.add_argument(
+        "path",
+        help="Path to a PDF file or a Directory containing PDF files."
+    )
+
+    args = parser.parse_args()
+
+    path = os.path.abspath(args.path)
+    base_dir = ''
+    filename = ''
+
+    if os.path.exists(path):
+        if os.path.isdir(path):
+            base_dir = path
+        elif os.path.isfile(path) and path.endswith('.pdf'):
+            base_dir = os.path.dirname(path)
+            filename = os.path.basename(path)
+        else:
+            logger.error("Argument must be a PDF file or a Directory.")
+            sys.exit(1)
+    else:
+        logger.error(f"Directory or file [{args.path}] path does not exist!")
+        sys.exit(1)
+
+    return base_dir, filename
+
 def main():
-    
+        
     print_header()
     # validade arguments passed in the command line
-    base_dir, filename = validate_arguments(sys.argv)
+    #base_dir, filename = validate_arguments(sys.argv)
+    # use argparse instead of sys.argv
+    base_dir, filename = parse_arguments()
     
     # set handler to capture the 'control+C' interruption from keyboard
     signal.signal(signal.SIGINT, keyboardInterruptHandler)
+    
     
     # target path is either a (full path) directory or (full path) file name
     target_path = base_dir + '/' + filename
@@ -434,6 +524,5 @@ def main():
         logger.info('*' * 80)
         logger.info('Finished => Renamed files : ' + str(rename_counter))
 
-if __name__ == "__main__":
-
-    main()
+#if __name__ == "__main__":
+#    main()

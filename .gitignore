@@ -4,7 +4,7 @@ bkp/
 .DS_Store
 ./examples/.DS_Store
 ./examples/auto_renamed_pdf
-.venv
+.venv/
 .DS_Store
 .python-version
 build/
@@ -14,3 +14,7 @@ dist/
 *.so
 *~.vscode/
 venv*/
+*.pyc
+generate_distribution.sh
+reinstall_package_locally.sh
+upload_distribution_to_TestPyPI.sh
