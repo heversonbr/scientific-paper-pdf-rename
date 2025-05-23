@@ -31,3 +31,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = { find = { include = ["sci_paper_rename"] } }
+# By default, it searches in the root folder. 
+# if we use the src directory as a source folder, we wont need it here. 
+# im using this to tell setuptools to look for sci_paper_rename in a folder 
+# different than src
