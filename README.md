@@ -25,11 +25,17 @@ If both methods succeed, the user is prompted to choose which title to use.
 The current version depends on **Python 3.11.6** and **PyMuPDF 1.26.0**. 
 Please make sure to have them installed before running the package!
 
-If your version doesn't match, use [pyenv](https://github.com/pyenv/pyenv) to install Python version 3.11.6.
+If your version doesn't match, use [pyenv](https://github.com/pyenv/pyenv) to install and switch to a virtual environment with Python version 3.11.6.
+
+### TLDR: pyenv 
+
+* **Installing pyenv**: check pyenv installation instructions [here](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation)
+
+* **Using pyenv**: check how to use pyenv [here](https://github.com/pyenv/pyenv?tab=readme-ov-file#usage)
 
 ## Installation
 
-You can install **sci-paper-rename** easily with pip:
+Once you have the right version of Python installed, you can install **sci-paper-rename** easily with pip:
 
 ### From [PyPI](https://pypi.org/project/sci-paper-rename/)
 
@@ -43,13 +49,14 @@ pip install sci-paper-rename
 pip install git+https://github.com/heversonbr/sci-paper-rename.git
 ```
 
-### Or, if you prefer to install locally after cloning
+### Or, if you have Python 3.11.6 already installed and prefer to install locally by cloning
 
 ```bash
 git clone https://github.com/heversonbr/sci-paper-rename.git
 cd sci-paper-rename
 python3 -m venv .venv
 source .venv/bin/activate
+pip install --upgrade pip
 pip install .
 ```
 
