@@ -4,7 +4,9 @@ Tired of messy filenames for all your scientific papers? **sci-paper-rename** is
 here to help! This handy command-line tool automatically renames your PDFs using
 their actual paper titles — no more guesswork or manual renaming.
 
-<img src="./img/pdf_rename_white_rounded.png" alt="sci-paper-rename" width="600"/>
+<p align="center">
+  <img src="./img/pdf_rename_light.png" alt="sci-paper-rename" width="600"/>
+</p>
 
 Just run it on your folder of papers, and watch it tidy up your files with neat,
 meaningful names. Easy, fast, and stress-free!
