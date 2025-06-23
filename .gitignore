@@ -19,3 +19,4 @@ generate_distribution.sh
 reinstall_package_locally.sh
 upload_distribution_to_PyPI.sh
 my_notes.adoc
+.ropeproject/
